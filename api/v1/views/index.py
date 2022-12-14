@@ -13,11 +13,12 @@ def r_json():
     return jsonify(status='OK')
 
 
-@app_views.route('/stats')
+@app_views.route('/stats', strict_slashes=False)
 def display_stats():
-    return jsonify({"amenities": storage.count("Amenity"),
-                "cities": storage.count("City"),
-                "places": storage.count("Place"),
-                "reviews": storage.count("Review"),
-                "states": storage.count("State"),
-                "users": storage.count("User")})
+    result = {}
+    cls_dict = {"Amenity": "amenities", "City": "cities", "Place": "places",
+                "Review": "reviews", "State": "states", "User": "users"}
+
+    for k, v in cls_dict.items():
+        result[v] = storage.count(k)
+    return jsonify(result)
