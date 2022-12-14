@@ -5,6 +5,7 @@ from flask import jsonify, abort, request
 from models import storage
 from models.state import State
 
+
 @app_views.route('/states', methods=['GET'])
 def display_states():
     states = storage.all("State").values()
@@ -25,14 +26,12 @@ def display_state(state_id):
 
 @app_views.route('/states/<state_id>', methods=['DELETE'])
 def delete_state(state_id):
-    try:
-        state_obj = storage.get("State", state_id)
-        storage.delete(state_obj)
-        storage.save()
-        response = jsonify({}), 200
-        return response
-    except:
+    if not delete_state:
         abort(404)
+    else:
+        delete_state.delete()
+        storage.save()
+        return jsonify({}), 200
 
 
 @app_views.route('/states/', methods=['POST'])
