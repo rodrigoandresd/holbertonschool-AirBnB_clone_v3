@@ -51,20 +51,18 @@ def create_user():
     return jsonify(new_user.to_dict()), 201
 
 
-@app_views.route('/user/<user_id>', methods=['PUT'])
+@app_views.route('/user/<user_id>', methods=['PUT'], strict_slashes=False)
 def update_user(user_id):
-    new_dict = request.get_json()
-    if type(new_dict) is dict:
-        user_obj = storage.get("User", user_id)
-        if user_obj is None:
-            abort(404)
-        for k, v in new_dict.items():
-            if k not in ["id", "email", "created_at", "updated_at"]:
-                continue
-            else:
-                setattr(user_obj, k, v)
-        user_obj.save()
-        return jsonify(user_obj.to_dict()), 200
-    else:
-        response = jsonify({"error": "Not a JSON"}), 400
-        return response
+    req_user = request.get_json()
+    if not request.json:
+        abort(400, 'Not a JSON')
+    mod_user = storage.get('User', user_id)
+    if mod_user is None:
+        abort(404)
+    for key, value in req_user.items():
+        if key in ['id', 'email', 'created_at', 'updated_at']:
+            continue
+        else:
+            setattr(mod_user, key, value)
+    storage.save()
+    return jsonify(mod_user.to_dict()), 200
