@@ -61,8 +61,8 @@ def update_user(user_id):
         for k, v in new_dict.items():
             if k not in ["id", "email", "created_at", "updated_at"]:
                 setattr(user_obj, k, v)
-            user_obj.save()
-            return jsonify(user_obj.to_dict()), 200
+        user_obj.save()
+        return jsonify(user_obj.to_dict()), 200
     else:
         response = jsonify({"error": "Not a JSON"}), 400
         return response
