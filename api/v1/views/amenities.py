@@ -26,14 +26,13 @@ def display_amenity(amenity_id):
 
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'])
 def delete_amenity(amenity_id):
-    try:
-        amenity_obj = storage.get("Amenity", amenity_id)
-        storage.delete(amenity_obj)
-        storage.save()
-        response = jsonify({}), 200
-        return response
-    except:
+    delete_amenity = storage.get('Amenity', amenity_id)
+    if not delete_amenity:
         abort(404)
+    else:
+        delete_amenity.delete()
+        storage.save()
+        return jsonify({}), 200
 
 
 @app_views.route('/amenities/', methods=['POST'])
@@ -62,7 +61,8 @@ def update_amenity(amenity_id):
         if amenity_obj is None:
             abort(404)
         for k, v in new_dict.items():
-            setattr(amenity_obj, k, v)
+            if k not in ["id", "state_id", "created_at", "updated_at"]:
+                setattr(amenity_obj, k, v)
         amenity_obj.save()
         return jsonify(amenity_obj.to_dict()), 200
     else:
