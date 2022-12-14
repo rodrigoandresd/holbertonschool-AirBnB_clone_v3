@@ -19,5 +19,5 @@ def display_stats():
                 "Review": "reviews", "State": "states", "User": "users"}
 
     for key, value in cls_dict.items():
-        result[value] = storage.cout(key)
+        result[value] = storage.count(key)
     return jsonify(result)
