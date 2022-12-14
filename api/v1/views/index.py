@@ -12,12 +12,12 @@ def r_json():
     """a route that return JSON status """
     return jsonify(status='OK')
 
+
 @app_views.route('/stats')
 def display_stats():
-    result = {}
-    cls_dict = {"Amenity": "amenities", "City": "cities", "Place": "places",
-                "Review": "reviews", "State": "states", "User": "users"}
-
-    for key, value in cls_dict.items():
-        result[value] = storage.count(key)
-    return jsonify(result)
+    return jsonify({"amenities": storage.count("Amenity"),
+                "cities": storage.count("City"),
+                "places": storage.count("Place"),
+                "reviews": storage.count("Review"),
+                "states": storage.count("State"),
+                "users": storage.count("User")})
