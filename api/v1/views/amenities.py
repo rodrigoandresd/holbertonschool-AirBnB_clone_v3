@@ -6,7 +6,7 @@ from models import storage
 from models.amenity import Amenity
 
 
-@app_views.route('/amenities/', methods=['GET'])
+@app_views.route('/amenities', methods=['GET'])
 def display_amenities():
     amenities = storage.all("Amenity").values()
     amenities_list = []
@@ -27,15 +27,15 @@ def display_amenity(amenity_id):
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'])
 def delete_amenity(amenity_id):
     delete_amenity = storage.get('Amenity', amenity_id)
-    if not delete_amenity:
-        abort(404)
-    else:
+    if delete_amenity:
         delete_amenity.delete()
         storage.save()
         return jsonify({}), 200
+    else:
+        abort(404)
 
 
-@app_views.route('/amenities/', methods=['POST'])
+@app_views.route('/amenities', methods=['POST'])
 def create_amenity():
     new_dict = request.get_json()
     if type(new_dict) is dict:
