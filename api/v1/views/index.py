@@ -13,6 +13,7 @@ def r_json():
     return jsonify(status='OK')
 
 
+
 @app_views.route('/stats', strict_slashes=False)
 def display_stats():
     result = {}
