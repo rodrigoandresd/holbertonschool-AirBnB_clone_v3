@@ -4,9 +4,20 @@
 
 from api.v1.views import app_views
 from flask import Flask, jsonify
+from models import storage
 
 
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
 def r_json():
     """a route that return JSON status """
     return jsonify(status='OK')
+
+@app_views.route('/stats')
+def display_stats():
+    result = {}
+    cls_dict = {"Amenity": "amenities", "City": "cities", "Place": "places",
+                "Review": "reviews", "State": "states", "User": "users"}
+
+    for key, value in cls_dict.items():
+        result[value] = storage.cout(key)
+    return jsonify(result)
