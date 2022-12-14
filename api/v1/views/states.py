@@ -14,7 +14,7 @@ def display_states():
     return jsonify(states_list)
 
 
-@app_views.route('/states/<uuid:state_id>', methods=['GET'])
+@app_views.route('/states/<state_id>', methods=['GET'])
 def display_state(state_id):
     try:
         state_obj = storage.get("State", state_id)
@@ -23,7 +23,7 @@ def display_state(state_id):
         abort(404)
 
 
-@app_views.route('/states/<uuid:state_id>', methods=['DELETE'])
+@app_views.route('/states/<state_id>', methods=['DELETE'])
 def delete_state(state_id):
     try:
         state_obj = storage.get("State", state_id)
@@ -53,7 +53,7 @@ def create_state():
             return response
 
 
-@app_views.route('/states/<uuid:state_id>', methods=['PUT'])
+@app_views.route('/states/<state_id>', methods=['PUT'])
 def update_state(state_id):
     new_dict = request.get_json()
     if type(new_dict) is dict:
