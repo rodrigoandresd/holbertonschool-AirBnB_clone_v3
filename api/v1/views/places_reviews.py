@@ -39,29 +39,29 @@ def delete_reviews(review_id):
     return jsonify({}), 200
 
 
-@app_views.route('/places/<place_id>/reviews', methods=['POST'])
+@app_views.route('/places/<place_id>/reviews', methods=['POST'],
+                 strict_slashes=False)
 def create_review(place_id):
-    my_place = storage.get('Place', place_id)
-    if not my_place:
+    place = storage.get("Place", place_id)
+    if not place:
         abort(404)
-
-    new_review = request.get_json()
-    if not new_review:
-        abort(400, 'Not a JSON')
-    if 'user_id' not in new_review:
-        abort(400, 'Missing user_id')
-
-    my_user = storage.get('User', new_review['user_id'])
-    if not my_user:
-        abort(404)
-
-    if 'text' not in new_review:
-        abort(400, 'Missing text')
-
-    n_review = Review(**new_review)
-    setattr(n_review, 'place_id', place_id)
-    n_review.save()
-    return jsonify(n_review.to_dict()), 201
+    new_dict = request.get_json(silent=True)
+    if type(new_dict) is dict:
+        if "user_id" not in new_dict.keys():
+            return jsonify({"error": "Missing user_id"}), 400
+        user = storage.get("User", new_dict["user_id"])
+        if user is None:
+            abort(404)
+        if "text" not in new_dict.keys():
+            return jsonify({"error": "Missing text"}), 400
+        review = Review(text=new_dict["text"], user_id=new_dict["user_id"],
+                        place_id=place_id)
+        for k, v in new_dict.items():
+            setattr(review, k, v)
+        review.save()
+        return jsonify(review.to_dict()), 201
+    else:
+        return jsonify({"error": "Not a JSON"}), 400
 
 
 @app_views.route('/reviews/<review_id>', methods=['PUT'])
