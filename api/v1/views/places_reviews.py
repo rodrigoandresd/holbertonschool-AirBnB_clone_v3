@@ -4,6 +4,8 @@ from api.v1.views import app_views
 from flask import jsonify, abort, request
 from models import storage
 from models.review import Review
+from models.place import Place
+from models.user import User
 
 
 @app_views.route('/places/<place_id>/reviews', methods=['GET'])
@@ -65,7 +67,8 @@ def update_review(review_id):
         if review_obj is None:
             abort(404)
         for k, v in new_dict.items():
-            if k not in ["id", "user_id", "place_id", "created_at", "updated_at"]:
+            if k not in ["id", "user_id", "place_id", "created_at",
+                         "updated_at"]:
                 setattr(review_obj, k, v)
             review_obj.save()
             return jsonify(review_obj.to_dict()), 200
