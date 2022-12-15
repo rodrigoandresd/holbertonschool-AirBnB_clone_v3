@@ -7,7 +7,7 @@ from models.place import Place
 from models.city import City
 
 
-@app_views.route('/cities/<uuid:city_id>/places',
+@app_views.route('/cities/<city_id>/places',
                  methods=['GET'], strict_slashes=False)
 def display_places(city_id):
     city = storage.get("City", city_id)
@@ -22,7 +22,7 @@ def display_places(city_id):
         abort(404)
 
 
-@app_views.route('/places/<uuid:place_id>', methods=['GET'],
+@app_views.route('/places/<place_id>', methods=['GET'],
                  strict_slashes=False)
 def display_place(place_id):
     try:
@@ -32,7 +32,7 @@ def display_place(place_id):
         abort(404)
 
 
-@app_views.route('/places/<uuid:place_id>', methods=['DELETE'],
+@app_views.route('/places/<place_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_place(place_id):
     try:
@@ -45,7 +45,7 @@ def delete_place(place_id):
         abort(404)
 
 
-@app_views.route('/cities/<uuid:city_id>/places', methods=['POST'],
+@app_views.route('/cities/<city_id>/places', methods=['POST'],
                  strict_slashes=False)
 def create_place(city_id):
     city = storage.get("City", city_id)
@@ -71,7 +71,7 @@ def create_place(city_id):
             return response
 
 
-@app_views.route('/places/<uuid:place_id>', methods=['PUT'],
+@app_views.route('/places/<place_id>', methods=['PUT'],
                  strict_slashes=False)
 def update_place(place_id):
     new_dict = request.get_json(silent=True)
