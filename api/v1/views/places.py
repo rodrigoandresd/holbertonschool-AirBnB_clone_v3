@@ -35,14 +35,13 @@ def display_place(place_id):
 @app_views.route('/places/<place_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_place(place_id):
-    try:
-        place_obj = storage.get("Place", place_id)
-        storage.delete(place_obj)
-        storage.save()
-        response = jsonify({}), 200
-        return response
-    except:
+    place_obj = storage.get("Place", place_id)
+    if place_obj is None:
         abort(404)
+    storage.delete(place_obj)
+    storage.save()
+    response = jsonify({}), 200
+    return response
 
 
 @app_views.route('/cities/<city_id>/places', methods=['POST'],
