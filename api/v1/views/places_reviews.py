@@ -57,10 +57,9 @@ def create_review(place_id):
     if not my_place:
         abort(404)
 
-    new_review = Review(user_id=request.json['user_id'],
-                        text=request.json['text'], place_id=place_id)
-    storage.new(new_review)
-    storage.save()
+    new_review = Review(**new_review)
+    setattr(new_review, 'place_id', place_id)
+    new_review.save()
     return jsonify(new_review.to_dict()), 201
 
 
