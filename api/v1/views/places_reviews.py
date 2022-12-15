@@ -58,10 +58,10 @@ def create_review(place_id):
     if 'text' not in new_review.keys():
         abort(400, 'Missing text')
 
-    new_review = Review(**new_review)
-    setattr(new_review, 'place_id', place_id)
-    new_review.save()
-    return jsonify(new_review.to_dict()), 201
+    n_review = Review(**new_review)
+    setattr(n_review, 'place_id', place_id)
+    n_review.save()
+    return jsonify(n_review.to_dict()), 201
 
 
 @app_views.route('/reviews/<review_id>', methods=['PUT'])
