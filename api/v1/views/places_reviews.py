@@ -48,14 +48,14 @@ def create_review(place_id):
     new_review = request.get_json()
     if not new_review:
         abort(400, 'Not a JSON')
-    if 'user_id' not in new_review.keys():
+    if 'user_id' not in new_review:
         abort(400, 'Missing user_id')
 
-    my_user = storage.get('User', request.json['user_id'])
+    my_user = storage.get('User', new_review['user_id'])
     if not my_user:
         abort(404)
 
-    if 'text' not in new_review.keys():
+    if 'text' not in new_review:
         abort(400, 'Missing text')
 
     n_review = Review(**new_review)
