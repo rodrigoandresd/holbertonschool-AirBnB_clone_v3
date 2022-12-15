@@ -51,7 +51,7 @@ def create_user():
     return jsonify(new_user.to_dict()), 201
 
 
-@app_views.route('/user/<user_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/user/<user_id>', methods=['PUT'])
 def update_user(user_id):
     mod_user = storage.get('User', user_id)
     if not mod_user:
